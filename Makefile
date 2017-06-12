@@ -28,10 +28,12 @@ IS_GITDIR=$(shell git rev-parse --is-inside-work-tree)
 NEXT_PATCH=$(shell tools/bump patch `git describe --tags --abbrev=0`)
 NEXT_MINOR=$(shell tools/bump minor `git describe --tags --abbrev=0`)
 NEXT_MAJOR=$(shell tools/bump major `git describe --tags --abbrev=0`)
+DIST_SRC=$(shell ls src/)
 
 .PHONY: clean-pyc clean-build clean guard-%
 
 help:
+	@echo "build         - build files to be dsitributed in the github release."
 	@echo "check-status  - will check whether there are outstanding changes."
 	@echo "check-release - will check whether the current directory matches the tagged release in git."
 	@echo "patch-release - increments the patch release level, build and push to github."
@@ -105,6 +107,15 @@ major-release: guard-GITHUB_TOKEN check-status check-release
 
 showver:
 	@echo $(CUR_TAG)
+
+build-tar:
+	rm -rf build/*
+	@for i in $(DIST_SRC); \
+	do \
+		cd src/$$i; \
+		tar -cvzf ../../build/$$i.tar.gz *; \
+		cd ../..; \
+	done
 
 check-status:
 	@if [ `git status -s . | wc -l` != 0 ] ; then echo "\n\n\n\n\tERROR: YOU HAVE UNCOMMITTED CHANGES\n\n  Commit any pending changes before push new release.\n\n\n\n"; exit 1; fi
