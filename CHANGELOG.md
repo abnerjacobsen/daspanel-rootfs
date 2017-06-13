@@ -1,6 +1,13 @@
 # Changelog
 
 
+## 0.4.0 (2017-06-13)
+
+### Other
+
+* Separate the Daspanel-specific layer from the Linux boot system. [Abner G Jacobsen]
+
+
 ## 0.3.0 (2017-06-13)
 
 ### Other
