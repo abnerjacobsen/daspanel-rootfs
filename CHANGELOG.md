@@ -1,6 +1,13 @@
 # Changelog
 
 
+## 0.5.0 (2017-06-13)
+
+### Other
+
+* Changes to new way to bootstrap container image. [Abner G Jacobsen]
+
+
 ## 0.4.0 (2017-06-13)
 
 ### Other
