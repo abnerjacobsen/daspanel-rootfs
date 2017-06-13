@@ -1,6 +1,13 @@
 # Changelog
 
 
+## 0.3.0 (2017-06-13)
+
+### Other
+
+* Fix. [Abner G Jacobsen]
+
+
 ## 0.2.0 (2017-06-13)
 
 ### Other
