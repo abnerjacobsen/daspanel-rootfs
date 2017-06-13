@@ -33,7 +33,8 @@ DIST_SRC=$(shell ls src/)
 .PHONY: clean-pyc clean-build clean guard-%
 
 help:
-	@echo "build         - build files to be dsitributed in the github release."
+	@echo "build-zip     - build ZIP files to be dsitributed in the github release."
+	@echo "build-dist    - put files under build/ into dist/."
 	@echo "check-status  - will check whether there are outstanding changes."
 	@echo "check-release - will check whether the current directory matches the tagged release in git."
 	@echo "patch-release - increments the patch release level, build and push to github."
@@ -74,8 +75,15 @@ patch-release: guard-GITHUB_TOKEN check-status check-release
 	@changelog=$$(git log $(COMPARISON) --oneline --no-merges) ; \
 	echo "**Changelog $(NEXT_PATCH)**<br/>$$changelog"; \
 	tools/github-release release -u abnerjacobsen -r daspanel-rootfs -t $(NEXT_PATCH) -n $(NEXT_PATCH) -d "**Changelog**<br/>$$changelog"
+	@DIST_FILES="$(shell ls dist/)"; \
+	echo "$$DIST_FILES"; \
+	for i in $$DIST_FILES; \
+	do \
+		echo "Uploading $$i..."; \
+		tools/github-release upload -u abnerjacobsen -r daspanel-rootfs -t $(NEXT_PATCH) -n $$i -f dist/$$i -R; \
+	done
 
-minor-release: guard-GITHUB_TOKEN check-status check-release
+minor-release: guard-GITHUB_TOKEN check-status check-release build-zip build-dist
 	echo "Minor release $(NEXT_MINOR)..."
 	@git tag -a "$(NEXT_MINOR)" -m "Minor release $(NEXT_MINOR)"
 	@gitchangelog > ./CHANGELOG.md
@@ -89,6 +97,13 @@ minor-release: guard-GITHUB_TOKEN check-status check-release
 	@changelog=$$(git log $(COMPARISON) --oneline --no-merges) ; \
 	echo "**Changelog $(NEXT_MINOR)**<br/>$$changelog"; \
 	tools/github-release release -u abnerjacobsen -r daspanel-rootfs -t $(NEXT_MINOR) -n $(NEXT_MINOR) -d "**Changelog**<br/>$$changelog"
+	@DIST_FILES="$(shell ls dist/)"; \
+	echo "$$DIST_FILES"; \
+	for i in $$DIST_FILES; \
+	do \
+		echo "Uploading $$i..."; \
+		tools/github-release upload -u abnerjacobsen -r daspanel-rootfs -t $(NEXT_MINOR) -n $$i -f dist/$$i -R; \
+	done
 
 major-release: guard-GITHUB_TOKEN check-status check-release
 	echo "Major release $(NEXT_MAJOR)..."
@@ -103,19 +118,37 @@ major-release: guard-GITHUB_TOKEN check-status check-release
 	@changelog=$$(git log $(COMPARISON) --oneline --no-merges) ; \
 	echo "**Changelog $(NEXT_MAJOR)**<br/>$$changelog"; \
 	tools/github-release release -u abnerjacobsen -r daspanel-rootfs -t $(NEXT_MAJOR) -n $(NEXT_MAJOR) -d "**Changelog**<br/>$$changelog"
+	@DIST_FILES="$(shell ls dist/)"; \
+	echo "$$DIST_FILES"; \
+	for i in $$DIST_FILES; \
+	do \
+		echo "Uploading $$i..."; \
+		tools/github-release upload -u abnerjacobsen -r daspanel-rootfs -t $(NEXT_MAJOR) -n $$i -f dist/$$i -R; \
+	done
+
 
 
 showver:
 	@echo $(CUR_TAG)
 
-build-tar:
-	rm -rf build/*
+build-zip:
+	rm -rf build/*.zip
 	@for i in $(DIST_SRC); \
 	do \
 		cd src/$$i; \
-		tar -cvzf ../../build/$$i.tar.gz *; \
+		zip -r ../../build/$$i.zip *; \
 		cd ../..; \
 	done
+
+build-dist:
+	@rm -rf dist/*
+	@BUILD_SRC="$(shell ls build/)"; \
+	echo "$$BUILD_SRC"; \
+	for i in $$BUILD_SRC; \
+	do \
+		cp build/$$i dist/$$i; \
+	done
+
 
 check-status:
 	@if [ `git status -s . | wc -l` != 0 ] ; then echo "\n\n\n\n\tERROR: YOU HAVE UNCOMMITTED CHANGES\n\n  Commit any pending changes before push new release.\n\n\n\n"; exit 1; fi
@@ -130,8 +163,8 @@ clean: clean-build clean-pyc clean-test
 	find . -name '*~' -exec rm -f {} +
 
 clean-build:
-	rm -rf build/
-	rm -rf dist/
+	rm -rf build/*
+	rm -rf dist/*
 	rm -rf .eggs/
 	find . -name '*.egg-info' -exec rm -fr {} +
 	find . -name '*.egg' -exec rm -f {} +
