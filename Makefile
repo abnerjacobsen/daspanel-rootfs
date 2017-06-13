@@ -62,7 +62,7 @@ guard-%: GUARD
 .PHONY: GUARD
 GUARD:
 
-patch-release: guard-GITHUB_TOKEN check-status check-release
+patch-release: guard-GITHUB_TOKEN clean check-status check-release build-zip build-dist
 	echo "Patch release $(NEXT_PATCH)..."
 	@git tag -a "$(NEXT_PATCH)" -m "Patch release $(NEXT_PATCH)"
 	@gitchangelog > ./CHANGELOG.md
@@ -83,7 +83,7 @@ patch-release: guard-GITHUB_TOKEN check-status check-release
 		tools/github-release upload -u abnerjacobsen -r daspanel-rootfs -t $(NEXT_PATCH) -n $$i -f dist/$$i -R; \
 	done
 
-minor-release: guard-GITHUB_TOKEN check-status check-release build-zip build-dist
+minor-release: guard-GITHUB_TOKEN clean check-status check-release build-zip build-dist
 	echo "Minor release $(NEXT_MINOR)..."
 	@git tag -a "$(NEXT_MINOR)" -m "Minor release $(NEXT_MINOR)"
 	@gitchangelog > ./CHANGELOG.md
@@ -105,7 +105,7 @@ minor-release: guard-GITHUB_TOKEN check-status check-release build-zip build-dis
 		tools/github-release upload -u abnerjacobsen -r daspanel-rootfs -t $(NEXT_MINOR) -n $$i -f dist/$$i -R; \
 	done
 
-major-release: guard-GITHUB_TOKEN check-status check-release
+major-release: guard-GITHUB_TOKEN clean check-status check-release build-zip build-dist
 	echo "Major release $(NEXT_MAJOR)..."
 	@git tag -a "$(NEXT_MAJOR)" -m "Major release $(NEXT_MAJOR)"
 	@gitchangelog > ./CHANGELOG.md
@@ -159,7 +159,7 @@ check-release:
 	@if [ $(NUM_TAGS) = 0 ] ; then echo "\n\n\n\n\tERROR: YOU NOT HAVE CREATED ANY GIT TAG\n\n  Commit any pending changes and create new tag/release using:\n\n\t'make [minor,major,patch]-release'.\n\n\n\n"; exit 1; fi
 	@echo "*** OK to push release ***"
 
-clean: clean-build clean-pyc clean-test
+clean: clean-build clean-pyc
 	find . -name '*~' -exec rm -f {} +
 
 clean-build:
