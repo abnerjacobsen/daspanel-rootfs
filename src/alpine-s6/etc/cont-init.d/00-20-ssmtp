@@ -24,14 +24,14 @@ case "$DASPANEL_WAIT_FOR_API" in
         ;;
 esac
 
-/usr/bin/gomplate -d cfg=$DASPANEL_SYS_APISERVER/tenants/$DASPANEL_SYS_UUID \
+/opt/daspanel/bin/gomplate -d cfg=$DASPANEL_SYS_APISERVER/tenants/$DASPANEL_SYS_UUID \
     --datasource-header "cfg=Authorization: $DASPANEL_SYS_APIKEY" \
-    < /opt/daspanel/conf-templates/etc/ssmtp/mailhog-ssmtp.conf.tmpl \
+    < /opt/daspanel/conf-templates/base/ssmtp/mailhog-ssmtp.conf.tmpl \
     >  /etc/ssmtp/ssmtp.conf
 
-/usr/bin/gomplate -d cfg=$DASPANEL_SYS_APISERVER/tenants/$DASPANEL_SYS_UUID \
+/opt/daspanel/bin/gomplate -d cfg=$DASPANEL_SYS_APISERVER/tenants/$DASPANEL_SYS_UUID \
     --datasource-header "cfg=Authorization: $DASPANEL_SYS_APIKEY" \
-    < /opt/daspanel/conf-templates/etc/ssmtp/revaliases.tmpl \
+    < /opt/daspanel/conf-templates/base/ssmtp/revaliases.tmpl \
     >  /etc/ssmtp/revaliases
 
 # secure ssmtp - https://wiki.archlinux.org/index.php/SSMTP
