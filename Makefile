@@ -136,7 +136,7 @@ build-zip:
 	@for i in $(DIST_SRC); \
 	do \
 		cd src/$$i; \
-		zip -r ../../build/$$i.zip *; \
+		zip -q -r ../../build/$$i.zip *; \
 		cd ../..; \
 	done
 
