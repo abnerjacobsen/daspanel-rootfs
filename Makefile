@@ -132,7 +132,7 @@ showver:
 	@echo $(CUR_TAG)
 
 build-zip:
-	rm -rf build/*.zip
+	@rm -rf build/*.zip
 	@for i in $(DIST_SRC); \
 	do \
 		cd src/$$i; \
