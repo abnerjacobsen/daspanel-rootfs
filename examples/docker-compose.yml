@@ -1,0 +1,26 @@
+version: '2.0'
+services:
+  php-fpm:
+    image: openbridge/ob_php-fpm
+    container_name: php-fpm
+    #command: sleep 7200
+    restart: always
+    env_file:
+      - ./env/phpfpm.env
+    environment:
+      - DASPANEL_SYS_UUID=civmw76wg000001p2dwqxpvet
+      - DASPANEL_WAIT_FOR_API=NO
+    ports:
+      - 9000:9000
+    tmpfs: /var/cache
+    tty: true
+    volumes:
+       - ./data:/app
+       - ./data:/opt/daspanel/data
+    ulimits:
+      nproc: 65535
+      nofile:
+          soft: 49999
+          hard: 99999
+#volumes:
+#  db_data:
