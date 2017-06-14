@@ -4,7 +4,7 @@ services:
     image: openbridge/ob_php-fpm
     container_name: php-fpm
     #command: sleep 7200
-    restart: always
+    #restart: always
     env_file:
       - ./env/phpfpm.env
     environment:
