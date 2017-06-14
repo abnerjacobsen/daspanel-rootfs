@@ -1,6 +1,15 @@
 # Changelog
 
 
+## 0.6.0 (2017-06-14)
+
+### Other
+
+* Make verification of DASPANEL_SYS_USERID more flexible. [Abner G Jacobsen]
+
+* Be sure to remove not needed files before publish release. [Abner G Jacobsen]
+
+
 ## 0.5.0 (2017-06-13)
 
 ### Other
