@@ -1,6 +1,17 @@
 # Changelog
 
 
+## 0.7.0 (2017-06-19)
+
+### Other
+
+* REVERTED: Make verification of DASPANEL_SYS_USERID more flexible. [Abner G Jacobsen]
+
+* Restar always do'nt work with s6. [Abner G Jacobsen]
+
+* Word in progress. [Abner G Jacobsen]
+
+
 ## 0.6.0 (2017-06-14)
 
 ### Other
